@@ -25,7 +25,7 @@ SECRET_KEY = '+0%bp^nz)q*m&7y*qq6y+lr9xg%x3ii*2@*f7--ss&@yh$ll(t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['netify-app.herokuapp.com']
 
 
 # Application definition
