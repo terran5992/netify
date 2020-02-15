@@ -1,0 +1,147 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}Netify - {{ source.name }}{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    .subcontainer { margin: 150px auto; max-width: 640px; }
+        span {
+            font: 40px / 1 Courier;
+            font-weight: bold;
+        }
+        .control {
+            font: 12px /1 Arial;
+        }
+</style>
+{% endblock %}
+
+{% block body %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<br>
+<span>
+<h1 style="text-align: center;">Source : {{ source.name }}</h1>
+<br>
+<div style="text-align: center;">
+<span>$ </span><span style="margin: auto;" class="src_value">{{ source.records.latest.amount }}</span>
+</div>
+<br>
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+  Delete Source
+  </button>
+</span>
+<br>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this source,
+        <br>
+        Once deleted, all records along with the source,
+        <br>
+        will be destroyed and will not be able to be restored
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        <form action="{% url 'delete_source' %}" method="POST">
+          {% csrf_token %}
+
+          <button type="submit" name="source_id" value="{{ source.id }}" class="btn btn-danger" aria-label="Close">
+            Delete
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="chart" style="max-height: 500px; max-width: 500px; margin: auto;">
+
+<canvas id="myChart" width="10" height="10"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+
+        labels: {{ src_labels|safe }},
+        datasets: [{
+            label: '$',
+            data: {{ src_amt|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+</div>
+
+
+<br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Date Added</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in source.records.all %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>$ {{ record.amount }}</td>
+      <td>{{ record.date_added }}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+
+{% load static %}
+<script src="{% static 'js/numberAnimate.js' %}" ></script>
+<script src="{% static 'js/source.js' %}" ></script>
+
+
+{% endblock %}

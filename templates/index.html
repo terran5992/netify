@@ -1,0 +1,169 @@
+{% extends 'layout.html' %}
+
+{% block title %}Netify - Index Page{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+    .subcontainer { margin: 150px auto; max-width: 640px; }
+        span {
+            font: 40px / 1 Courier;
+            font-weight: bold;
+        }
+        .control {
+            font: 12px /1 Arial;
+        }
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+{% if user.is_authenticated %}
+<br>
+<div style="text-align: center;">
+<span>$ </span><span style="margin: auto;" class="net_worth"></span>
+</div>
+<br>
+<div class='chart' margin style="max-width: 500px; max-height: 500px; margin: auto;">
+<canvas  style="margin: auto;"  id="myChart" width="10" height="10"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+
+        labels: {{ src_name_list|safe }},
+        datasets: [{
+            label: '$',
+            data: {{ src_data_list|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+</div>
+
+<br>    
+
+
+<div class="row row-cols-1 row-cols-md-3">
+    {% for source in sources  %}
+    <br>
+      <div class="col mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h3><a href="{% url 'source_view' id=source.id %}">{{ source.name }}</a></h3>
+              </div>
+          <div class="card-body">
+            <input type="hidden" class="src_value" value="{{ source.records.latest.amount }}">
+            <!-- <h5 class="card-title source_value">{{ source.records.latest.amount }}</h5> -->
+            <div style="text-align: center;">
+                <span>$ </span><span style="margin: auto;" class="source_value">{{ source.records.latest.amount }}</span>
+            </div>
+            
+            <h6 class="card-subtitle mb-2 text-muted">{{ source.records.lastest.amount }}</h6>
+          </div>
+          <div class="card-footer">
+            <form action="{% url 'update_source' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="source_id" value="{{ source.id }}">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">$</span>
+                    </div>
+                    <input placeholder="{{ source.records.latest.amount }}" required type="text" name="new_amt" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="submit">Update</button>
+                      </div>
+        
+                  </div>      
+                  </form>
+            <small class="text-muted">Last updated on {{ source.records.latest.date_added }}</small>
+          </div>
+        </div>
+      </div>
+    <br> 
+    {% endfor %}
+
+    <br>
+      <div class="col mb-4">
+        <div class="card">
+            <form action="{% url 'add_source' %}" method="POST">
+                {% csrf_token %}
+            <div class="card-header">
+                <input placeholder="Add a new source" required type="text" name="source_name" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+            </div>
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>
+          </div>
+          <div class="card-footer">
+
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">$</span>
+                    </div>
+                    <input placeholder="New amount" required type="text" name="amt" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="submit">Add</button>
+                      </div>
+        
+                  </div>      
+                  </form>
+          </div>
+        </div>
+      </div>
+    <br> 
+
+
+
+    </div>
+
+
+
+{% else %}
+<div class="jumbotron">
+    <h1 class="display-3">Track your growth </h1>
+    <p class="lead">A net simple to use net worth tracker</p>
+    <hr class="my-2">
+    <p>Motivate yourself to work harder each day</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Sign Up Now</a>
+    </p>
+</div>
+{% endif %}
+
+{% load static %}
+<script src="{% static 'js/numberAnimate.js' %}" ></script>
+<script src="{% static 'js/index.js' %}" ></script>
+
+{% endblock %}
