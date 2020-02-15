@@ -162,7 +162,7 @@ def signup_view(request):
         new_user = form.save()
         auth.login(request, new_user)
         messages.success(request,"Your account has been created and logged in !")
-        return redirect(request, 'index')
+        return redirect('index')
 
     else:
         form = forms.UserCreationForm
