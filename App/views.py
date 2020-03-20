@@ -169,3 +169,6 @@ def signup_view(request):
         form2 = forms.UserForm
 
         return render(request, 'signup.html', {"form": form2})
+
+def privacy_view(request):
+    return render(request, 'privacy.html')
