@@ -26,6 +26,6 @@ urlpatterns = [
     path('update_source', views.update_source, name = 'update_source'),  
     path('delete_source', views.delete_source, name = 'delete_source'),
     path('source/<int:id>', views.source_view, name = 'source_view'),  
-
+    path('privacy', views.privacy_view, name = 'privacy_view'),  
 
 ]
