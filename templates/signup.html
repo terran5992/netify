@@ -3,12 +3,16 @@
 {% block title %}Netify - Signup Page{% endblock %}
 
 {% block body %}
+<br>
+<br>
 
-<form action="{% url 'signup' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" class='btn btn-primary'>
-
-</form>
+<div class='container'> 
+    <form action="{% url 'signup' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class='btn btn-primary'>
+    
+    </form>
+</div>
 
 {% endblock %}

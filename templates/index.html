@@ -151,15 +151,27 @@ var myChart = new Chart(ctx, {
 
 
 {% else %}
-<div class="jumbotron">
-    <h1 class="display-3">Track your growth </h1>
-    <p class="lead">A net simple to use net worth tracker</p>
-    <hr class="my-2">
-    <p>Motivate yourself to work harder each day</p>
-    <p class="lead">
-        <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Sign Up Now</a>
-    </p>
+<div style="text-align: center;">
+  <h1 style="
+    text-align: center;
+    margin-top: 1em;" 
+  class="display-3">An intuitive net worth tracker </h1>
+
+
+  <hr class="my-2">
+  <p class="lead">The last tracker that you ever need</p>
+
+  <p class="lead">
+      <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Sign Up Now</a>
+  </p>
+
+  <br>
+  <p>How it works</p>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/i7BzSRYaZhg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
+
+
+ 
 {% endif %}
 
 {% load static %}
