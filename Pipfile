@@ -13,7 +13,7 @@ gunicorn = "==20.0.4"
 pytz = "==2019.3"
 sqlparse = "==0.3.0"
 whitenoise = "==5.0.1"
-Django = "==2.2.21"
+Django = "==2.2.22"
 Markdown = "==3.2.1"
 
 [requires]
